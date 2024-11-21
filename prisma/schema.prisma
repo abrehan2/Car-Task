@@ -9,6 +9,18 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model Car {
+  id                          String @id @default(auto()) @map("_id") @db.ObjectId
+  color                       String
+  fuelType                    String
+  manufacturer                String
+  model                       String
+  type                        String
+  vehicle                     String
+  vehicleIdentificationNumber String
+  vehicleRegistrationNumber   String
 }
