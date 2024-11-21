@@ -6,7 +6,8 @@
     "plugin:storybook/recommended"
   ],
   "globals": {
-    "React": "readonly"
+    "React": "readonly",
+    "globalThis": "readonly"
   },
   "overrides": [
     {
@@ -21,7 +22,8 @@
       1,
       {
         "args": "after-used",
-        "argsIgnorePattern": "^_"
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "prisma"
       }
     ]
   }
