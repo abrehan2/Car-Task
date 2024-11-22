@@ -12,12 +12,14 @@ import { VehicleData } from '@/types';
 import { motion } from 'framer-motion';
 
 export default function Home() {
-  const { visibleCars, handleSearch, loadMore } = useCars();
+  const { visibleCars, handleSearch, loadMore, isLoading } = useCars();
 
   return (
     <Wrapper className="space-y-10 p-10">
       <Search onSearch={handleSearch} />
-      {visibleCars.length > 0 ? (
+      {isLoading ? (
+        <Loader />
+      ) : visibleCars.length > 0 ? (
         <>
           <MasonaryWrapper>
             {visibleCars.map((car: VehicleData) => (
@@ -48,7 +50,9 @@ export default function Home() {
           </motion.div>
         </>
       ) : (
-        <Loader />
+        <div className="text-center">
+          <p className="text-gray-300">No Results Found</p>
+        </div>
       )}
     </Wrapper>
   );

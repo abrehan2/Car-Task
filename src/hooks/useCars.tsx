@@ -7,14 +7,19 @@ const useCars = () => {
   const [cars, setCars] = useState<VehicleData[]>([]);
   const [visibleCars, setVisibleCars] = useState<VehicleData[]>([]);
   const [visibleCount, setVisibleCount] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchCars = async () => {
+      setIsLoading(true);
       const data = await getCars();
       if ('success' in data && data.success) {
         setCars(data.cars);
         setVisibleCars(data.cars.slice(0, visibleCount));
+      } else {
+        console.error('Failed to fetch cars');
       }
+      setIsLoading(false);
     };
     fetchCars();
   }, []);
@@ -31,7 +36,7 @@ const useCars = () => {
           car.type.toLowerCase().includes(lowerCaseQuery) ||
           car.fuelType.toLowerCase().includes(lowerCaseQuery)
       );
-      setVisibleCars(filtered.slice(0, visibleCount));
+      setVisibleCars(filtered.slice(0, visibleCount) ?? []);
     }
   };
 
@@ -43,7 +48,7 @@ const useCars = () => {
     });
   };
 
-  return { visibleCars, handleSearch, loadMore };
+  return { visibleCars, handleSearch, loadMore, isLoading };
 };
 
 export default useCars;
