@@ -42,7 +42,7 @@ const useCars = () => {
     });
   };
 
-  return { cars, visibleCars, handleSearch, loadMore };
+  return { visibleCars, handleSearch, loadMore };
 };
 
 export default useCars;

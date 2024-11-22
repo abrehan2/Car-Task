@@ -9,6 +9,7 @@ import useCars from '@/hooks/useCars';
 import { MasonaryWrapper } from '@/layouts/masonary';
 import { Wrapper } from '@/layouts/wrapper';
 import { VehicleData } from '@/types';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const { visibleCars, handleSearch, loadMore } = useCars();
@@ -20,14 +21,31 @@ export default function Home() {
         <>
           <MasonaryWrapper>
             {visibleCars.map((car: VehicleData) => (
-              <Card key={car.id} car={car} />
+              <motion.div
+                key={car.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 100,
+                  damping: 25,
+                  delay: 0.1 * visibleCars.indexOf(car),
+                }}
+              >
+                <Card car={car} />
+              </motion.div>
             ))}
           </MasonaryWrapper>
-          <div className="flex justify-center w-full">
+          <motion.div
+            className="flex justify-center w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
             <Button onClick={loadMore} variant={'secondary'}>
               Load More
             </Button>
-          </div>
+          </motion.div>
         </>
       ) : (
         <Loader />
