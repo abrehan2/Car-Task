@@ -1,12 +1,20 @@
 'use server';
 
 // Imports:
-import prismaDB from '@/libs/prisma-config';
+import prismaDB from '@/lib/prisma-config';
 import TryCatchBlock from '@/utils/try-catch';
 import { faker } from '@faker-js/faker';
+import { EventEmitter } from 'events';
 
-export const generateSeed = TryCatchBlock(async (_req, res) => {
-  for (let i = 0; i < 100; i++) {
+const eventEmitter = new EventEmitter();
+let seedTriggered = false;
+
+const generateSeed = TryCatchBlock(async () => {
+  if (seedTriggered) {
+    return { success: true, message: 'Seed already generated' };
+  }
+
+  for (let i = 0; i < 50; i++) {
     await prismaDB.car.create({
       data: {
         color: faker.vehicle.color(),
@@ -21,5 +29,13 @@ export const generateSeed = TryCatchBlock(async (_req, res) => {
     });
   }
 
-  res.status(200).json({ message: 'Seed generated successfully' });
+  seedTriggered = true;
+  return { message: 'Seed generated' };
 });
+
+const triggerSeed = () => {
+  eventEmitter.once('generateSeed', generateSeed);
+  eventEmitter.emit('generateSeed');
+};
+
+export default triggerSeed;
