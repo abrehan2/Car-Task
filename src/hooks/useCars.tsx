@@ -28,7 +28,8 @@ const useCars = () => {
         (car) =>
           car.vehicle.toLowerCase().includes(lowerCaseQuery) ||
           car.model.toLowerCase().includes(lowerCaseQuery) ||
-          car.type.toLowerCase().includes(lowerCaseQuery)
+          car.type.toLowerCase().includes(lowerCaseQuery) ||
+          car.fuelType.toLowerCase().includes(lowerCaseQuery)
       );
       setVisibleCars(filtered.slice(0, visibleCount));
     }
