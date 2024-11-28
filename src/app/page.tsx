@@ -12,7 +12,7 @@ import { VehicleData } from '@/types';
 import { motion } from 'framer-motion';
 
 export default function Home() {
-  const { visibleCars, handleSearch, loadMore, isLoading } = useCars();
+  const { visibleCars, handleSearch, loadMore, isLoading, params } = useCars();
 
   return (
     <Wrapper className="space-y-10 p-10">
@@ -38,16 +38,18 @@ export default function Home() {
               </motion.div>
             ))}
           </MasonaryWrapper>
-          <motion.div
-            className="flex justify-center w-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            <Button onClick={loadMore} variant={'secondary'}>
-              Load More
-            </Button>
-          </motion.div>
+          {!params.has('search') && (
+            <motion.div
+              className="flex justify-center w-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+              <Button onClick={loadMore} variant={'secondary'}>
+                Load More
+              </Button>
+            </motion.div>
+          )}
         </>
       ) : (
         <div className="text-center">

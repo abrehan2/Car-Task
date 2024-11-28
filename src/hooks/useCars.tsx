@@ -1,6 +1,7 @@
 // Imports:
 import getCars from '@/actions/car';
 import { VehicleData } from '@/types';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const useCars = () => {
@@ -8,6 +9,9 @@ const useCars = () => {
   const [visibleCars, setVisibleCars] = useState<VehicleData[]>([]);
   const [visibleCount, setVisibleCount] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -22,13 +26,17 @@ const useCars = () => {
       setIsLoading(false);
     };
     fetchCars();
-  }, []);
+  }, [visibleCount]);
 
   const handleSearch = (query: string) => {
     if (!query) {
+      params.delete('search');
+      router.push(`/?${params.toString()}`);
       setVisibleCars(cars.slice(0, visibleCount));
     } else {
+      params.delete('search');
       const lowerCaseQuery = query.toLowerCase();
+
       const filtered = cars.filter(
         (car) =>
           car.vehicle.toLowerCase().includes(lowerCaseQuery) ||
@@ -36,6 +44,10 @@ const useCars = () => {
           car.type.toLowerCase().includes(lowerCaseQuery) ||
           car.fuelType.toLowerCase().includes(lowerCaseQuery)
       );
+
+      params.set('search', lowerCaseQuery);
+      router.push(`/?${params.toString()}`);
+
       setVisibleCars(filtered.slice(0, visibleCount) ?? []);
     }
   };
@@ -48,7 +60,7 @@ const useCars = () => {
     });
   };
 
-  return { visibleCars, handleSearch, loadMore, isLoading };
+  return { visibleCars, handleSearch, loadMore, isLoading, params };
 };
 
 export default useCars;

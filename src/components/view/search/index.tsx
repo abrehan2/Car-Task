@@ -1,7 +1,7 @@
 // Imports:
 import { Input } from '@/components/ui/input';
 
-export function Search({ onSearch }: { onSearch: (query: string) => void }) {
+export function Search({ onSearch }: { onSearch: (_query: string) => void }) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);
   };
